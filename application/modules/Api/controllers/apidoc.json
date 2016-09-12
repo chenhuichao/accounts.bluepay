@@ -1,0 +1,20 @@
+{
+  "name": "apidoc-Accounts",
+  "version": "",
+  "description": "账户接口文档",
+  "title": "账户接口文档",
+  "url" : "",
+  "sampleUrl": "",
+  "header": {
+    "title": "文档描述",
+    "filename": ""
+  },
+  "footer": {
+    "title": "",
+    "filename": ""
+  },
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": true
+  }
+}
