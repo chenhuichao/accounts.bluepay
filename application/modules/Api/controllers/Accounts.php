@@ -223,6 +223,9 @@ class AccountsController extends ApibaseController
         $request['state'] = RequestSvc::Request('state','');
   
         $results = FreezesSvc::getFreezesRecordByUid($accountid,$request,$option);
+        foreach($results['record'] as &$row){
+            $row['state_desc'] = Freezes::$STATE_CONF["{$row['state']}"]['NAME'];
+        }
         $ret['data'] = $results;
         $this->outPut($ret);
     }

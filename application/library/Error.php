@@ -17,22 +17,6 @@ class Error
     }/*}}}*/
 
     //服务级错误码
-    public static function error4SerCode()
-    {/*{{{*/
-        //01为needer
-        //02为mearchant
-        //03为order
-        //04为admin
-        //05为gold
-        return array(
-            '20101' => '需求服务错误',
-            '20102' => '司机信息或者需求不存在(或者已完成)',
-            '20103' => '已经被抢光',
-            '20501' => '余额不足，操作错误',
-        );
-    }/*}}}*/
-
-    //服务级错误码
     public static function error5SerCode()
     {/*{{{*/
         //01为needer
@@ -62,8 +46,7 @@ class Error
         if (!$code) {
             return '';
         }
-        //$arr = array_merge_recursive(self::error4SysCode(),self::error4SerCode());
-        $arr = self::error4SysCode() + self::error4SerCode() + self::error5SerCode();
+        $arr = self::error4SysCode() + self::error5SerCode();
 
         return isset($arr[$code]) ? $arr[$code] : '';
     }/*}}}*/

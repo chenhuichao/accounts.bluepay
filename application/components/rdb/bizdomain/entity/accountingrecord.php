@@ -41,15 +41,18 @@ class Accountingrecord extends Entity
 		self::CAT_TRANSFERS_IN =>array('NAME'=>'余额转入'),
 	);
 	
+	const FROM_POS         = 10;
 	const FROM_SYS         = 11;
 	const FROM_ALIPAY      = 12;
 
 	static $FROM_OPTIONS = array(
+		self::FROM_POS,
 		self::FROM_SYS,
 		self::FROM_ALIPAY,
 	);
 
 	static $FROM_CONF = array(
+		self::FROM_POS =>array('NAME'=>'POS'),
 		self::FROM_SYS =>array('NAME'=>'系统内'),
 		self::FROM_ALIPAY =>array('NAME'=>'支付宝'),
 	);

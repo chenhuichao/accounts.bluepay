@@ -576,7 +576,7 @@ class AccountsSvc
 									return $ret;
 								}
 								$amount = bcadd($_amount_,$_fee_,2);
-								$balance = bcsub($accountobj->balance,$_amount_,2);
+								$balance = bcsub($accountobj->balance,$amount,2);
 
 								if($balance < 0){
 									$ret = array(

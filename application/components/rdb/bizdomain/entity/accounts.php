@@ -8,7 +8,7 @@ class Accounts extends Entity
 		self::CAT_CASH,
 	);
 	static $CAT_CONF = array(
-		self::CAT_CASH => array('NAME'=>'钱包账户'),
+		self::CAT_CASH => array('NAME'=>'钱包'),
 	);
 
 	public static function createByBiz( $param )

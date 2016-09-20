@@ -86,6 +86,76 @@ class NotifyController extends ApibaseController
         AlipayHelper::responseFail();
     }/*}}}*/
 
+     public function posAction()
+     {
+        $ret = $this->initOutPut();
+        $orderid = 'POS_'.RequestSvc::Request('orderid');
+        $user_id = RequestSvc::Request('user_id');
+        $amount = sprintf("%.2f",(RequestSvc::Request('amount',0)));
+        $fee = sprintf("%.2f",(RequestSvc::Request('fee',0)));
+        $paychannel = PayChannel::CHANNEL_POS_RECHARGE;
+        $tradeno = RequestSvc::Request('tradeno');
+
+        $result = TransactionSvc::getByOrderid($orderid);
+        if(!empty($result)){
+            $ret['errno'] = '50110';
+            $this->outPut($ret);
+        }
+        
+        $uid = BindUserSvc::getUidByKey($user_id);
+        if($uid) $this->uid = $uid;
+        else{
+            $ret = $this->initOutPut();
+            $ret['errno'] = '50000';
+            $this->outPut($ret);
+        }
+
+        if($fee <= 0){
+            $ret['errno'] = '50103';
+            $this->outPut($ret);
+        }
+        
+        if($amount <= 0){
+            $ret['errno'] = '50103';
+            $this->outPut($ret);
+        }
+        if(!in_array($paychannel,PayChannel::$RECHARGE_CHANNEL_OPTIONS)){
+            $ret['errno'] = '50105';
+            $this->outPut($ret);
+        }
+            
+        $params = array(
+            'orderid'=>$orderid,
+            'btype'=>Transaction::BTYPE_RECHARGE,
+            'uid'=>$this->uid,
+            'type'=>Transaction::TYPE_IN,
+            'amount'=>$amount,
+        );
+        $transid = TransactionSvc::addTrans($params);
+
+        $cat = Accountingrecord::CAT_RECHARGE;
+    
+        $from = Accountingrecord::FROM_POS;
+        $remark = 'POS Recharge';
+        
+        $accountinfo = AccountsSvc::getByUidAndCat($uid);
+        $accountid = $accountinfo['id'];
+        $params = array(
+            'tradeno'=>$tradeno,
+            'channelid'=>$paychannel,
+            'amount'=>$_amount_,
+            'remark'=>$remark,
+            'fee'=>$fee,
+        );
+        $ret = AccountsSvc::accountingProcess($params,$accountid,$transid,$cat,$from,$remark);
+        if($ret['e'] != ErrorSvc::ERR_OK){
+            $ret['errno'] = '50108';
+            $this->outPut($ret);
+        }
+
+        $this->outPut($ret);
+
+     }
 
 
 }

@@ -4,6 +4,7 @@ class PayChannel
 	const CHANNEL_UNKNOWN = -1;
 	const CHANNEL_BALANCE_PAY = 1;
 	const CHANNEL_ALIPAY_MOBILE  = 2;
+	const CHANNEL_POS_RECHARGE = 3;
 	
 	const CHANNEL_BALANCE_PAY_CLS = 'ChannelBalancePay';
 	private static function getPayChannelClass($channel)
@@ -40,11 +41,13 @@ class PayChannel
 	
 	static $RECHARGE_CHANNEL_OPTIONS = array(
 		self::CHANNEL_ALIPAY_MOBILE,
+		self::CHANNEL_POS_RECHARGE,
 	);
 
 	static $PAY_CHANNEL_OPTIONS = array(
 		self::CHANNEL_BALANCE_PAY,
 		self::CHANNEL_ALIPAY_MOBILE,
+		self::CHANNEL_POS_RECHARGE
 	);
 
 	static $CHANNEL_CONF = array(
@@ -59,6 +62,10 @@ class PayChannel
 		self::CHANNEL_UNKNOWN =>array(
 			'NAME'=>'未知渠道',
 			'CODE'=>'UNKNOWN',
+		),
+		self::CHANNEL_POS_RECHARGE=>array(
+			'NAME'=>'POS充值',
+			'CODE'=>'POS_RECHARGE',
 		),
 	);
 	
