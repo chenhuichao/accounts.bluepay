@@ -166,8 +166,8 @@ class AccountsSvc
 		$total = $r['balance'] + $freezes;
 		$accountinfo = array(
 			'balance'=>$r['balance'],
-			'feezes'=>$freezes,
-			'total'=>$total,
+			'feezes'=>sprintf("%.2f",$freezes),
+			'total'=>sprintf("%.2f",$total),
 		);
 		return $accountinfo;
 	}
