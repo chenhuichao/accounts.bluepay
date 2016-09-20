@@ -1,5 +1,5 @@
 <?php
-class BindUserDao extends BaseDao
+class BinduserDao extends BaseDao
 {
 	const TABLE_NAME = 'bind_user';
 
