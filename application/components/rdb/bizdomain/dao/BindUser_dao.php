@@ -1,7 +1,7 @@
 <?php
 class BinduserDao extends BaseDao
 {
-	const TABLE_NAME = 'bind_user';
+	const TABLE_NAME = 'binduser';
 
 	private function getTableName()
 	{

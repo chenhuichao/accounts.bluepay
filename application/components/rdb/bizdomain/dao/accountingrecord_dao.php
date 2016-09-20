@@ -1,7 +1,7 @@
 <?php
 class AccountingrecordDao extends BaseDao
 {
-	const TABLE_NAME = 'accounting_record';
+	const TABLE_NAME = 'accountingrecord';
 
 	private function getTableName()
 	{
