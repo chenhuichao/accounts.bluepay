@@ -152,14 +152,13 @@ class NotifyController extends ApibaseController
             'remark'=>$remark,
             'fee'=>$_fee_,
         );
-        $ret = AccountsSvc::accountingProcess($params,$accountid,$transid,$cat,$from,$remark);
-        if($ret['e'] != ErrorSvc::ERR_OK && $ret['e'] != ErrorSvc::ERR_TRANSACTION_RESPONSE_REPEAT){
-            $ret['errno'] = '50108';
+        $res = AccountsSvc::accountingProcess($params,$accountid,$transid,$cat,$from,$remark);
+        if($res['e'] == ErrorSvc::ERR_OK || $res['e'] == ErrorSvc::ERR_TRANSACTION_RESPONSE_REPEAT){
+            $ret['errno'] = '0';
             $this->outPut($ret);
         }
-
+        $ret['errno'] = '50108';
         $this->outPut($ret);
-
      }
 
 
