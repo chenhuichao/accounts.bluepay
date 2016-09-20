@@ -29,7 +29,7 @@ class Bootstrap extends Yaf_Bootstrap_Abstract{
         $components = Yaf_Registry::get('config')->application->components;
         $components_arr = explode(',', $components);
         foreach ($components_arr as $component) {
-            include_once($components_dir . $component . '/auto_load.php');
+            include_once($components_dir .'/'. $component . '/auto_load.php');
         }
     }/*}}}*/
 

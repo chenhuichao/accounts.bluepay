@@ -1,5 +1,5 @@
 <?php
-include ROOT_PATH . '/src/include/client/user_client.php';
+include_once Yaf_Registry::get('config')->application->directory.'/include/client/user_client.php';
 class UserSdk
 {
     static private $_instances = array();
@@ -51,12 +51,12 @@ class UserSdk
     
     
 
-    public function setFlag($flag)
+    public static function setFlag($flag)
     {
         self::$_flag = $flag;
     }
 
-    public function getFlag()
+    public static function getFlag()
     {
         return self::$_flag;
     }
