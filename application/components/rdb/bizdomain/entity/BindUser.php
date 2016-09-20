@@ -24,7 +24,7 @@ class BindUser extends Entity
 		$cls = __CLASS__;
 		$obj = new $cls();
 		$obj->id = LoaderSvc::loadIdGenter()->create( self::ID_OBJ );
-		$obj->mobile = $param['mobile'];
+		$obj->key = $param['key'];
 		$obj->state = in_array($param['state'],self::$STATE_OPTIONS) ? $param['state'] : self::STATE_ENABLED;
 		$obj->ctime = date('Y-m-d H:i:s');
 		$obj->utime = isset($param['utime']) ? $param['utime'] : date('Y-m-d H:i:s');

@@ -1,7 +1,7 @@
 <?php
 class BindUserSvc
 {/*{{{*/
-	const OBJ = 'BindUser';
+	const OBJ = 'bind_user';
 	
 	static private function add( $param )
 	{
@@ -67,44 +67,44 @@ class BindUserSvc
 		return $results;
 	}/*}}}*/
 	
-	private static function getCreateUserLock($mobile)
+	private static function getCreateUserLock($key)
 	{
-		$lock = 'CREATE_USER_'.$mobile;
+		$lock = 'CREATE_USER_'.$key;
 		$r = MysqlSvc::getLock($lock);
 		return $r;
 	}
 
-	private static function releaseCreateUserLock($mobile)
+	private static function releaseCreateUserLock($key)
 	{
-		$lock = 'CREATE_USER_'.$mobile;
+		$lock = 'CREATE_USER_'.$key;
 		$r = MysqlSvc::releaseLock($lock);
 		return $r;
 	}
 	
-	public static function createUser($mobile)
+	public static function createUser($key)
 	{
-		$uid = self::getUidByMobile($mobile);
+		$uid = self::getUidByKey($key);
 		if($uid) return $uid;
-		$ret = self::bindUser($mobile);
+		$ret = self::bindUser($key);
 		if($ret['e'] == ErrorSvc::ERR_OK){
-			return self::getUidByMobile($mobile);
+			return self::getUidByKey($key);
 		}
 		return false;
 	}
 	
-	public static function bindUser($mobile)
+	public static function bindUser($key)
 	{
 		$ret = array(
 			'e'=>ErrorSvc::ERR_OK,
 		);
-		$r = self::getCreateUserLock($mobile);
+		$r = self::getCreateUserLock($key);
 		if($r){
 			LoaderSvc::loadExecutor()->beginTrans();
 			
-			$uid = self::getUidByMobile($mobile);
+			$uid = self::getUidByKey($key);
 			if(!is_null($uid)){
 				LoaderSvc::loadExecutor()->rollback();
-				self::releaseCreateUserLock($mobile);
+				self::releaseCreateUserLock($key);
 				$ret = array(
 					'e'=>ErrorSvc::ERR_BIND_USER_EXIST,
 				);
@@ -112,17 +112,17 @@ class BindUserSvc
 			}
 			
 			$params = array(
-				'mobile'=>$mobile,
+				'key'=>$key,
 			);
 			
 			$obj = self::add($params);
 			if(is_object($obj) && LoaderSvc::loadExecutor()->inTrans()){
 				LoaderSvc::loadExecutor()->commit();
-				self::releaseCreateUserLock($mobile);
+				self::releaseCreateUserLock($key);
 				return $ret;
 			}else{
 				LoaderSvc::loadExecutor()->rollback();
-				self::releaseCreateUserLock($mobile);
+				self::releaseCreateUserLock($key);
 				$ret = array(
 					'e'=>ErrorSvc::ERR_BIND_USER_FAIL,
 				);
@@ -142,9 +142,9 @@ class BindUserSvc
 		return false;
 	}
 	
-	public static function getUidByMobile($mobile)
+	public static function getUidByKey($key)
 	{
-		$uid = self::getDao()->getUidByMobile($mobile);
+		$uid = self::getDao()->getUidByKey($key);
 		return $uid;
 	}
 

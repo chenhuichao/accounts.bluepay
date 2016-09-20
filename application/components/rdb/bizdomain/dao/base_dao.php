@@ -3,6 +3,7 @@ class BaseDao
 {/*{{{*/
     public function add( $obj = null )
     {/*{{{*/
+
         if ( empty( $obj ) || !is_object( $obj ) )
         {
             return false;
@@ -15,21 +16,21 @@ class BaseDao
         return false;
     }/*}}}*/
 
-	public function getPage( $options )
-	{/*{{{*/
-		return Pager::render( $options );
-	}/*}}}*/
+    public function getPage( $options )
+    {/*{{{*/
+        return Pager::render( $options );
+    }/*}}}*/
 
     public function getAll( $cls )
     {/*{{{*/
         $sql = "select * ";
         $sql.= "from ".strtolower( $cls )." order by id desc";
         $data = $this->getExecutor()->querys( $sql, array() );
-		if(empty($data))
-		{
-			return array();
-		}
-		return $data;
+        if(empty($data))
+        {
+            return array();
+        }
+        return $data;
 
     }/*}}}*/
 
@@ -48,7 +49,7 @@ class BaseDao
         {
             return null;
         }
-
+        $cls = ucfirst(str_replace('_','',$cls));
         $obj = new $cls( $row );
 
         return $obj;
@@ -78,6 +79,8 @@ class BaseDao
         {
             return $objs;
         }
+        
+        $cls = ucfirst(str_replace('_','',$cls));
         foreach ( $rows as $row )
         {
             $objs[$row['id']] = new $cls( $row );
@@ -94,7 +97,7 @@ class BaseDao
         $sql = 'insert '.$this->getTableName( $obj ).' ';
         $sql.= '( `'.implode( "`, `", $cols ).'` ) ';
         $sql.= 'values ';
-        $sql.= '( '.implode( ", ", $hold ).' ); ';  
+        $sql.= '( '.implode( ", ", $hold ).' ); ';
         return $this->getExecutor()->exeNoQuery( $sql, $vals );
     }/*}}}*/
 
@@ -112,23 +115,24 @@ class BaseDao
         return false;
     }/*}}}*/
 
-	public function updateById($id, $param, $cls)
+    public function updateById($id, $param, $cls)
     {/*{{{*/
 
-		$updkey = array();
-		$updval = array();
-		foreach($param as $k=>$v)
-		{
-			$updkey[] = '`'.$k.'`=?';
-			$updval[] = $v;
-		}
-		$updval[] = $id;
-		$sql = "update ".strtolower( $cls )." set ";
-		$sql.= implode(',', $updkey);
-		$sql.= " where id=?";
-		return $this->getExecutor()->exeNoQuery( $sql, $updval );
+        $updkey = array();
+        $updval = array();
+        foreach($param as $k=>$v)
+        {
+            $updkey[] = '`'.$k.'`=?';
+            $updval[] = $v;
+        }
+        $updval[] = $id;
+        $sql = "update ".strtolower( $cls )." set ";
+        $sql.= implode(',', $updkey);
+        $sql.= " where id=?";
 
-	}/*}}}*/
+        return $this->getExecutor()->exeNoQuery( $sql, $updval );
+
+    }/*}}}*/
 
     private function addsImp( $objs )
     {/*{{{*/
@@ -167,8 +171,8 @@ class BaseDao
         return LoaderSvc::loadExecutor();
     }/*}}}*/
 
-	protected function getSlaveExecutor()
-	{/*{{{*/
+    protected function getSlaveExecutor()
+    {/*{{{*/
         return LoaderSvc::loadSlaveExecutor();
     }/*}}}*/
 

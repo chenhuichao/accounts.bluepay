@@ -3,6 +3,8 @@
 class ApibaseController extends Yaf_Controller_Abstract
 {
     public $uid;
+
+    const ACCOUNTS_APP_ID = 101;
     /**
      * @brief 接口初始化
      */
@@ -17,26 +19,26 @@ class ApibaseController extends Yaf_Controller_Abstract
         }
     }/*}}}*/
 
+    protected function getAppSessionId()
+    {
+        return strlen($_SERVER['HTTP_SID']) >= 26 ? $_SERVER['HTTP_SID'] : null;
+    }
+
     public function checkLogin()
     {/*{{{*/
-        //$logininfo = UserModel::getLoginInfo();
         
-        //for test start
-        $tel = RequestSvc::Request('tel','18510336321');
-        if(UtlsSvc::checkMobile($tel)){
-        	$logininfo['tel'] = $tel;
-        }
-        //for test end
-        
-        if(!empty($logininfo)){
-           $mobile = trim($logininfo['tel']);
-           $uid = BindUserSvc::createUser($mobile);
-           if($uid) $this->uid = $uid;
-           else{
-           	   $ret = $this->initOutPut();
-	           $ret['errno'] = '50000';
-	           $this->outPut($ret);
-           }
+        UserSdk::setFlag(self::ACCOUNTS_APP_ID);
+        $sid = $this->getAppSessionId();
+        $res = UserSdk::getUserInfoBySid($sid);
+        $key = isset($res['user_id']) && $res['user_id'] > 0 ? $res['user_id'] : 0;
+        if($key > 0){
+            $uid = BindUserSvc::getUidByKey($key);
+            if($uid) $this->uid = $uid;
+            else{
+                $ret = $this->initOutPut();
+                $ret['errno'] = '50000';
+                $this->outPut($ret);
+            }
         }else{
            $ret = $this->initOutPut();
            $ret['errno'] = '50101';

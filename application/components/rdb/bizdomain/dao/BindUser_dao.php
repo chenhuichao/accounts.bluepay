@@ -1,7 +1,7 @@
 <?php
 class BindUserDao extends BaseDao
 {
-	const TABLE_NAME = 'binduser';
+	const TABLE_NAME = 'bind_user';
 
 	private function getTableName()
 	{
@@ -44,12 +44,12 @@ class BindUserDao extends BaseDao
 		return $results;
 	}
 	
-	public function getUidByMobile($mobile)
+	public function getUidByKey($key)
 	{
 		$sql = "select `id` as uid ";
 		$sql.= "from ".self::getTableName()." ";
-		$sql.= "where `mobile`= ?";
-		$result = $this->getExecutor()->query($sql,array($mobile));
+		$sql.= "where `key`= ?";
+		$result = $this->getExecutor()->query($sql,array($key));
 		$uid = is_array($result) && $result['uid'] > 0 ? $result['uid'] : null;
 		return $uid;   
 	}
