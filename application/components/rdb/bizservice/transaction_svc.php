@@ -232,7 +232,7 @@ class TransactionSvc
         $len = $len > 0 ? $len : 10;
         
         $options['len'] = $len;
-        $options['offset'] = ($page - 1) * len;
+        $options['offset'] = ($page - 1) * intval($len);
         if(isset($option['orderby'])) $options['orderby'] = $option['orderby'];
         $request = array_merge($request,$params);
         $results = self::lists($request,$options,true);
