@@ -85,7 +85,7 @@ class LoaderSvc
 
     public static function loadDao( $entity )
     {/*{{{*/
-        $cls = $entity.'Dao';
+        $cls = ucfirst(str_replace('_','',$entity)).'Dao';
         $dao = ObjectFinder::find( $cls );
         if ( is_object( $dao ) )
         {
