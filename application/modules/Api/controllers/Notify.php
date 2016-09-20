@@ -90,13 +90,13 @@ class NotifyController extends ApibaseController
      {
         $ret = $this->initOutPut();
         $orderid = 'POS_'.RequestSvc::Request('orderid');
-        $user_id = RequestSvc::Request('user_id');
+        $merchant_id = RequestSvc::Request('merchant_id');
         $amount = sprintf("%.2f",(RequestSvc::Request('amount',0)));
         $fee = sprintf("%.2f",(RequestSvc::Request('fee',0)));
         $paychannel = PayChannel::CHANNEL_POS_RECHARGE;
         $tradeno = RequestSvc::Request('tradeno');
 
-        $uid = BindUserSvc::getUidByKey($user_id);
+        $uid = BindUserSvc::getUidByKey($merchant_id);
         if($uid) $this->uid = $uid;
         else{
             $ret = $this->initOutPut();
@@ -153,7 +153,7 @@ class NotifyController extends ApibaseController
             'fee'=>$_fee_,
         );
         $ret = AccountsSvc::accountingProcess($params,$accountid,$transid,$cat,$from,$remark);
-        if($ret['e'] != ErrorSvc::ERR_OK){
+        if($ret['e'] != ErrorSvc::ERR_OK && $ret['e'] != ErrorSvc::ERR_TRANSACTION_RESPONSE_REPEAT){
             $ret['errno'] = '50108';
             $this->outPut($ret);
         }

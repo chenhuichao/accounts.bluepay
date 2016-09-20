@@ -30,7 +30,7 @@ class ApibaseController extends Yaf_Controller_Abstract
         UserSdk::setFlag(self::ACCOUNTS_APP_ID);
         $sid = $this->getAppSessionId();
         $res = UserSdk::getUserInfoBySid($sid);
-        $key = isset($res['user_id']) && $res['user_id'] > 0 ? $res['user_id'] : 0;
+        $key = isset($res['merchant_id']) && $res['merchant_id'] > 0 ? $res['merchant_id'] : 0;
         if($key > 0){
             $uid = BindUserSvc::getUidByKey($key);
             if($uid) $this->uid = $uid;
