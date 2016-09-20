@@ -31,10 +31,12 @@ class UserSdk
     private function unserialize($str)
     {
         $r = unserialize($str);
-        if (false === $r) {
-            return null;
+        if (false === $r || $r['code'] != 'OK') {
+            LogSvc::debug(__CLASS__.'->'.__METHOD__.var_export($r,true));
+            return [];
         }
-        return $r;
+
+        return $r['result'];
     }
 
     // public function auth($username, $passwd, $debug = 1)
