@@ -1,7 +1,7 @@
 <?php
 class AccountingrecordSvc
 {/*{{{*/
-	const OBJ = 'accounting_record';
+	const OBJ = 'accountingrecord';
 	static public function add($param)
 	{
 		$obj = Accountingrecord::createByBiz($param);

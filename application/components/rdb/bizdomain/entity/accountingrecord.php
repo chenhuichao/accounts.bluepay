@@ -1,7 +1,7 @@
 <?php
 class Accountingrecord extends Entity
 {
-	const ID_OBJ  = 'accounting_record';
+	const ID_OBJ  = 'accountingrecord';
 
 	const TYPE_IN  	 	  = 1;
 	const TYPE_OUT  	  = -1;

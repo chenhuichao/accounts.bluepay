@@ -1,7 +1,7 @@
 <?php
 class BindUserSvc
 {/*{{{*/
-	const OBJ = 'bind_user';
+	const OBJ = 'binduser';
 	
 	static private function add( $param )
 	{

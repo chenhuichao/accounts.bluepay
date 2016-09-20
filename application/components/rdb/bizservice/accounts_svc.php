@@ -600,7 +600,7 @@ class AccountsSvc
 							$r1 = TransactionSvc::updateById($transid,$transparams);
 							
 							//更新账户余额
-							$r2 = self::updateById($accountid,$balance);
+							$r2 = self::updateBalance($accountid,$balance);
 
 							//写入账务流水
 							$log = array(

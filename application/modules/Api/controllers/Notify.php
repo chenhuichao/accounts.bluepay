@@ -96,12 +96,6 @@ class NotifyController extends ApibaseController
         $paychannel = PayChannel::CHANNEL_POS_RECHARGE;
         $tradeno = RequestSvc::Request('tradeno');
 
-        $result = TransactionSvc::getByOrderid($orderid);
-        if(!empty($result)){
-            $ret['errno'] = '50110';
-            $this->outPut($ret);
-        }
-        
         $uid = BindUserSvc::getUidByKey($user_id);
         if($uid) $this->uid = $uid;
         else{
@@ -124,17 +118,28 @@ class NotifyController extends ApibaseController
             $this->outPut($ret);
         }
             
-        $params = array(
-            'orderid'=>$orderid,
-            'btype'=>Transaction::BTYPE_RECHARGE,
-            'uid'=>$this->uid,
-            'type'=>Transaction::TYPE_IN,
-            'amount'=>$amount,
-        );
-        $transid = TransactionSvc::addTrans($params);
+
+        $result = TransactionSvc::getByOrderid($orderid);
+        if(!empty($result)){
+           $transid = $result['id'];
+           $_amount_  = $result['tin'];
+           $_fee_ = $result['fee'];
+        }else{
+            $params = array(
+                'orderid'=>$orderid,
+                'btype'=>Transaction::BTYPE_RECHARGE,
+                'uid'=>$this->uid,
+                'type'=>Transaction::TYPE_IN,
+                'amount'=>$amount,
+                'fee'=>$fee,
+            );
+            $transid = TransactionSvc::addTrans($params);
+            $_amount_ = $amount;
+            $_fee_ = $fee;
+        }
+       
 
         $cat = Accountingrecord::CAT_RECHARGE;
-    
         $from = Accountingrecord::FROM_POS;
         $remark = 'POS Recharge';
         
@@ -145,7 +150,7 @@ class NotifyController extends ApibaseController
             'channelid'=>$paychannel,
             'amount'=>$_amount_,
             'remark'=>$remark,
-            'fee'=>$fee,
+            'fee'=>$_fee_,
         );
         $ret = AccountsSvc::accountingProcess($params,$accountid,$transid,$cat,$from,$remark);
         if($ret['e'] != ErrorSvc::ERR_OK){
