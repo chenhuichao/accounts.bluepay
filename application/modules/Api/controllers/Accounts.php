@@ -40,6 +40,7 @@ class AccountsController extends ApibaseController
     public function transactionAction()
     {/*{{{*/
         $uid = $this->uid;
+        $ret = $this->initOutPut();
         $request = array();
         $option = array(
         	'page'=>RequestSvc::Request('page',1),
@@ -69,6 +70,7 @@ class AccountsController extends ApibaseController
     public function detailsAction()
     {/*{{{*/
         $uid = $this->uid;
+        $ret = $this->initOutPut();
         $request = array();
         $option = array(
         	'page'=>RequestSvc::Request('page',1),
@@ -212,11 +214,17 @@ class AccountsController extends ApibaseController
     	$ret = $this->initOutPut();
 		$accountinfo = AccountsSvc::getByUidAndCat($uid);
         $accountid = $accountinfo['id'];
+
+        $request = array();
+        $option = array(
+            'page'=>RequestSvc::Request('page',1),
+            'len'=>RequestSvc::Request('len',10),
+        );
+        $request['state'] = RequestSvc::Request('state','');
   
-        $results = FreezesSvc::getFreezesByAccounts($accountid);
+        $results = FreezesSvc::getFreezesRecordByUid($accountid,$request,$option);
         $ret['data'] = $results;
         $this->outPut($ret);
-    	
     }
     
     
@@ -224,9 +232,7 @@ class AccountsController extends ApibaseController
     {
     	//取现完成
     	$freezeid = RequestSvc::Request('freezesid','');
- 
     	$ret = AccountsSvc::unfreeze($freezeid,Freezes::STATE_DEFROSTED);
-    	
     	$this->outPut($ret);
     }
     

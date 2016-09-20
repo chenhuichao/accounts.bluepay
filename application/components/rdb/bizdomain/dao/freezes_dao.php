@@ -59,7 +59,6 @@ class FreezesDao extends BaseDao
 
 	public function getFreezesByAccounts($accountid)
 	{
-
 		$results = $this->getByAccountid($accountid,Freezes::STATE_FREEZE_IN);
 		return $results;
 	}

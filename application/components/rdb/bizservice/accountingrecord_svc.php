@@ -53,11 +53,23 @@ class AccountingrecordSvc
 			$sql_param[]	 = $request['dayend'].' 23:59:59';
 		}
 
+		if('' != $request['state']){
+			$request_param[] = 'state=' . $request['state'];
+			$sql_condition[] = '`state` = ?';
+			$sql_param[]	 = $request['state'];
+		}
+
 		if('' != $request['accountid']){
 			$request_param[] = 'accountid=' . $request['accountid'];
 			$sql_condition[] = '`accountid` = ?';
 			$sql_param[]	 = $request['accountid'];
 		}
+
+		if('' != $request['uid']){
+            $request_param[] = 'uid=' . $request['uid'];
+            $sql_condition[] = '`uid` = ?';
+            $sql_param[]     = $request['uid'];
+	    }
 		
 		$option = array();
 		$option['len'] = ($options['len'] > 0) ? $options['len'] : PER_PAGE;
@@ -99,6 +111,7 @@ class AccountingrecordSvc
     {
 		$request = array(
         	'uid'=>$uid,
+        	'state'=>$params['state']
         );
 
         $options = [];
@@ -108,7 +121,7 @@ class AccountingrecordSvc
 		$len = $len > 0 ? $len : 10; 
 				
         $options['len'] = $len;
-        $options['offset'] = ($page - 1) * $len;
+        $options['page'] = $page;
         if(isset($option['orderby'])) $options['orderby'] = $option['orderby'];
         $request = array_merge($request,$params);
         $results = self::lists($request,$options,true);

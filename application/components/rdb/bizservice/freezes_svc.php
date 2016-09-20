@@ -44,6 +44,12 @@ class FreezesSvc
 			$sql_condition[] = '`cat` = ?';
 			$sql_param[]	 = $request['cat'];
 		}
+
+		if('' != $request['state']){
+			$request_param[] = 'state=' . $request['state'];
+			$sql_condition[] = '`state` = ?';
+			$sql_param[]	 = $request['state'];
+		}
 		
 		$option = array();
 		$option['len'] = ($options['len'] > 0) ? $options['len'] : PER_PAGE;
@@ -85,6 +91,27 @@ class FreezesSvc
 	{
 		return self::getDao()->getFreezesSum($accountid);
 	}
+
+	static public function getFreezesRecordByUid($accountid,$params = array(),$option = array())
+    {
+		$request = array(
+        	'accountid'=>$accountid,
+        	'state'=>$params['state']
+        );
+
+        $options = [];
+		$page = intval($option['page']);
+		$page = $page >= 1 ? $page : 1;
+	    $len = intval($option['len']);
+		$len = $len > 0 ? $len : 10; 
+				
+        $options['len'] = $len;
+        $options['page'] = $page;
+        if(isset($option['orderby'])) $options['orderby'] = $option['orderby'];
+        $request = array_merge($request,$params);
+        $results = self::lists($request,$options,true);
+        return $results;
+     }
 
 }
 
