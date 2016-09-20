@@ -1,7 +1,7 @@
 <?php
-class BindUser extends Entity
+class Binduser extends Entity
 {
-	const ID_OBJ  = 'binduser';
+	const ID_OBJ  = 'bind_user';
 	const STATE_ENABLED = 1;
 	const STATE_DISABLED = 2;
 	
