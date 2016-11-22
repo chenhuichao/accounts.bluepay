@@ -91,6 +91,7 @@ class NotifyController extends ApibaseController
         $_Allow_Access_IP = array(
             '127.0.0.1',
             '120.76.225.218',
+            '221.223.80.158',
         );
 
         $_Allow_Access_App = array(
