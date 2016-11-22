@@ -100,8 +100,8 @@ class NotifyController extends ApibaseController
 
         $tmparr = explode('|',$_SERVER['HTTP_AUTHORIZATION']);
         $_App_Id = isset($_REQUEST['appid']) ? $_REQUEST['appid'] : $tmparr[1];
-
-        if(in_array($_App_Id,$_Allow_Access_App) && in_array($_Client_IP,$_Allow_Access_IP)){
+        $_Client_IP = UtlsSvc::getClientIP();
+        if(in_array($_App_Id,$_Allow_Access_App) /*&& in_array($_Client_IP,$_Allow_Access_IP)*/){
             return true;
         }
         return false;
