@@ -93,8 +93,8 @@ class NotifyController extends ApibaseController
         $merchant_id = RequestSvc::Request('merchant_id');
         $amount = sprintf("%.2f",(RequestSvc::Request('amount',0)));
         $fee = sprintf("%.2f",(RequestSvc::Request('fee',0)));
-        $sn = RequestSvc::Request('sn')
-        $user_id = RequestSvc::Request('user_id');
+        $sn = RequestSvc::Request('sn');
+        $user_id = RequestSvc::Request('user_id',0);
 
         $uid = BindUserSvc::getUidByKey($merchant_id);
         if($uid) $this->uid = $uid;
