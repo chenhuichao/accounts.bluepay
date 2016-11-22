@@ -592,6 +592,7 @@ class AccountsSvc
 							//更新交易状态
 							$transparams = array(
 								'state'=>Transaction::STATE_SUCC,
+								'sstate'=>Transaction::SSTATE_SETTLED,
 							    'channelid'=>$channelid,
 								'tradeno'=>$tradeno,
 								'fee'=>$_fee_,
