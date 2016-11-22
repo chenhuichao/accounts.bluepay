@@ -89,7 +89,7 @@ class NotifyController extends ApibaseController
     public function posPreApplyAction()
     {
         $ret = $this->initOutPut();
-        $orderid = 'POS_'.RequestSvc::Request('orderid');
+        $orderid = 'POS'.RequestSvc::Request('orderid');
         $merchant_id = RequestSvc::Request('merchant_id');
         $amount = sprintf("%.2f",(RequestSvc::Request('amount',0)));
         $fee = sprintf("%.2f",(RequestSvc::Request('fee',0)));
@@ -134,10 +134,21 @@ class NotifyController extends ApibaseController
         $ret = $this->initOutPut();
         $transid = RequestSvc::Request('transid');
         $merchant_id = RequestSvc::Request('merchant_id');
+        $remark = RequestSvc::Request('remark');
         
         $paychannel = RequestSvc::Request('paychannel') > 0 ? RequestSvc::Request('paychannel') : PayChannel::CHANNEL_POS_RECHARGE;
         $tradeno = RequestSvc::Request('tradeno');
- 
+        $state = RequestSvc::Request('state');
+
+        if($state == Transaction::STATE_SUCC) goto T_SUCC;
+        else goto T_FAIL;
+
+        T_FAIL:
+            $remark = 'POS Recharge Fail| '.$remark;
+            TransactionSvc::updateById($transid,array('state'=>Transaction::STATE_FAIL,'remark'=>$remark));
+            $this->outPut($ret);
+
+        T_SUCC:
         if(!in_array($paychannel,PayChannel::$RECHARGE_CHANNEL_OPTIONS)){
             $ret['errno'] = '50105';
             $this->outPut($ret);
@@ -155,7 +166,7 @@ class NotifyController extends ApibaseController
        
         $cat = Accountingrecord::CAT_RECHARGE;
         $from = Accountingrecord::FROM_POS;
-        $remark = 'POS Recharge';
+        $remark = 'POS Recharge Success| '.$remark;
         
         $uid = BindUserSvc::getUidByKey($merchant_id);
         if($uid) $this->uid = $uid;
@@ -178,6 +189,7 @@ class NotifyController extends ApibaseController
             $ret['errno'] = '0';
             $this->outPut($ret);
         }
+
         $ret['errno'] = '50108';
         $this->outPut($ret);
     }
