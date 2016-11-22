@@ -596,6 +596,7 @@ class AccountsSvc
 							    'channelid'=>$channelid,
 								'tradeno'=>$tradeno,
 								'fee'=>$_fee_,
+								'remark'=>$remark,
 							);
 
 							$r1 = TransactionSvc::updateById($transid,$transparams);

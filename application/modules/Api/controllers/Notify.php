@@ -196,7 +196,7 @@ class NotifyController extends ApibaseController
         
         $cat = Accountingrecord::CAT_RECHARGE;
         $from = Accountingrecord::FROM_POS;
-        $remark = 'POS Recharge Success| '.$remark;
+        $remark = 'POS Recharge Success | '.$remark;
         
         $uid = BindUserSvc::getUidByKey($merchant_id);
         if($uid) $this->uid = $uid;
