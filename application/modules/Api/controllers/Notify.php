@@ -86,6 +86,26 @@ class NotifyController extends ApibaseController
         AlipayHelper::responseFail();
     }/*}}}*/
 
+    private function authAccess()
+    {
+        $_Allow_Access_IP = array(
+            '127.0.0.1',
+            '120.76.225.218',
+        );
+
+        $_Allow_Access_App = array(
+            '101','201',
+        );
+
+        $tmparr = explode('|',$_SERVER['HTTP_AUTHORIZATION']);
+        $_App_Id = isset($_REQUEST['appid']) ? $_REQUEST['appid'] : $tmparr[1];
+
+        if(in_array($_App_Id,$_Allow_Access_App) && in_array($_Client_IP,$_Allow_Access_IP)){
+            return true;
+        }
+        return false;
+    }
+
     public function posPreApplyAction()
     {
         $ret = $this->initOutPut();
@@ -96,10 +116,14 @@ class NotifyController extends ApibaseController
         $sn = RequestSvc::Request('sn');
         $user_id = RequestSvc::Request('user_id',0);
 
+        if(!$this->authAccess()){
+            $ret['errno'] = '50111';
+            $this->outPut($ret);
+        }
+
         $uid = BindUserSvc::getUidByKey($merchant_id);
         if($uid) $this->uid = $uid;
         else{
-            $ret = $this->initOutPut();
             $ret['errno'] = '50000';
             $this->outPut($ret);
         }
@@ -139,6 +163,11 @@ class NotifyController extends ApibaseController
         $paychannel = RequestSvc::Request('paychannel') > 0 ? RequestSvc::Request('paychannel') : PayChannel::CHANNEL_POS_RECHARGE;
         $tradeno = RequestSvc::Request('tradeno');
         $state = RequestSvc::Request('state');
+
+        if(!$this->authAccess()){
+            $ret['errno'] = '50111';
+            $this->outPut($ret);
+        }
 
         if($state == Transaction::STATE_SUCC) goto T_SUCC;
         else goto T_FAIL;
