@@ -90,6 +90,7 @@ class Transaction extends Entity
 		$obj->channelid = is_null($param['channelid']) ? PayChannel::CHANNEL_UNKNOWN : $param['channelid'];
 		$obj->tradeno = is_null($param['tradeno']) ? '' : $param['tradeno'];
 		$obj->user_id = is_null($param['user_id']) ? 0 : $param['user_id'];
+		$obj->merchant_id = is_null($param['merchant_id']) ? 0 : $param['merchant_id'];
 		$obj->sn = is_null($param['sn']) ? '' : $param['sn'];
 		return $obj;
 	}
