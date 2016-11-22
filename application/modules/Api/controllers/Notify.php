@@ -170,6 +170,16 @@ class NotifyController extends ApibaseController
             $this->outPut($ret);
         }
 
+        $result = TransactionSvc::getById($transid);
+        if(!empty($result) && $result->state == Transaction::STATE_INIT){
+           $transid = $result->id;
+           $_amount_  = $result->tin;
+           $_fee_ = $result->fee;
+        }else{
+            $ret['errno'] = '50108';
+            $this->outPut($ret);
+        }
+
         if($state == Transaction::STATE_SUCC) goto T_SUCC;
         else goto T_FAIL;
 
@@ -184,16 +194,6 @@ class NotifyController extends ApibaseController
             $this->outPut($ret);
         }
         
-        $result = TransactionSvc::getById($transid);
-        if(!empty($result)){
-           $transid = $result->id;
-           $_amount_  = $result->tin;
-           $_fee_ = $result->fee;
-        }else{
-            $ret['errno'] = '50108';
-            $this->outPut($ret);
-        }
-       
         $cat = Accountingrecord::CAT_RECHARGE;
         $from = Accountingrecord::FROM_POS;
         $remark = 'POS Recharge Success| '.$remark;
