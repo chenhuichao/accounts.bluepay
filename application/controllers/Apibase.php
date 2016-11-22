@@ -5,12 +5,16 @@ class ApibaseController extends Yaf_Controller_Abstract
     public $uid;
 
     const ACCOUNTS_APP_ID = 101;
+
+    static $EXCEPT_CONTROLLER =  ['Notify'];
     /**
      * @brief 接口初始化
      */
     public function init()
     {/*{{{*/
-        $this->checkLogin();
+        $c = $this->getRequest()->getControllerName();
+        if(in_array($c,self::$EXCEPT_CONTROLLER)){}
+        else $this->checkLogin();
         $r = BindUserSvc::isDisabled($this->uid);
         if($r){
         	$ret = $this->initOutPut();
