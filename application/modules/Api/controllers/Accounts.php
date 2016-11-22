@@ -181,7 +181,7 @@ class AccountsController extends ApibaseController
         $accountid = $accountinfo['id'];
     	$transid = $r;
     	$cat = Accountingrecord::CAT_CASH;
-    	$remark = '客户取现';
+    	$remark = 'Customer Cash Apply';
     
         $response = AccountsSvc::freezes($accountid,$amount,$cat,$remark,$transid);
         if($response['e'] != ErrorSvc::ERR_OK){
@@ -190,7 +190,7 @@ class AccountsController extends ApibaseController
         	 $ret['msg'] = ErrorSvc::getMsg($response['e']);
         }else{
         	 TransactionSvc::setProcessResult($orderid,Transaction::STATE_PROCESSING);
-        	 $ret['msg'] = '取现申请提交成功，等待审核处理';
+        	 $ret['msg'] = 'Processing Transaction, Please Wait ...';
         }
         
         $this->outPut($ret);
