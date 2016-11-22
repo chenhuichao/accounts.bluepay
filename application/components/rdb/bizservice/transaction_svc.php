@@ -178,6 +178,9 @@ class TransactionSvc
 		$btype = $param['btype'];
 		$uid = $param['uid'];
 		$remark = isset($param['remark']) ? $param['remark'] : '';
+		$user_id = isset($param['user_id']) ? $param['user_id'] : 0;
+		$merchant_id = isset($param['merchant_id']) ? $param['merchant_id'] : 0;
+		$sn = isset($param['sn']) ? $param['sn'] : '';
 		$fee = isset($param['fee']) ? sprintf("%.2f",$param['fee']) : 0;
 		
 		if(strlen($orderid) == 0) return false;
