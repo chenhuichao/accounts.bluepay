@@ -86,15 +86,15 @@ class NotifyController extends ApibaseController
         AlipayHelper::responseFail();
     }/*}}}*/
 
-     public function posAction()
-     {
+    public function posPreApplyAction()
+    {
         $ret = $this->initOutPut();
         $orderid = 'POS_'.RequestSvc::Request('orderid');
         $merchant_id = RequestSvc::Request('merchant_id');
         $amount = sprintf("%.2f",(RequestSvc::Request('amount',0)));
         $fee = sprintf("%.2f",(RequestSvc::Request('fee',0)));
-        $paychannel = PayChannel::CHANNEL_POS_RECHARGE;
-        $tradeno = RequestSvc::Request('tradeno');
+        $sn = RequestSvc::Request('sn')
+        $user_id = RequestSvc::Request('user_id');
 
         $uid = BindUserSvc::getUidByKey($merchant_id);
         if($uid) $this->uid = $uid;
@@ -113,32 +113,46 @@ class NotifyController extends ApibaseController
             $ret['errno'] = '50103';
             $this->outPut($ret);
         }
+        $params = array(
+            'orderid'=>$orderid,
+            'btype'=>Transaction::BTYPE_RECHARGE,
+            'uid'=>$this->uid,
+            'type'=>Transaction::TYPE_IN,
+            'amount'=>$amount,
+            'fee'=>$fee,
+            'user_id'=>$user_id,
+            'sn'=>$sn,
+            'merchant_id'=>$merchant_id,
+        );
+        $transid = TransactionSvc::addTrans($params);
+        $ret['data'] = ['transid'=>$transid];
+        $this->outPut($ret);
+    }
+
+    public function posCallbackAction()
+    {
+        $ret = $this->initOutPut();
+        $transid = RequestSvc::Request('transid');
+        $merchant_id = RequestSvc::Request('merchant_id');
+        
+        $paychannel = RequestSvc::Request('paychannel') > 0 ? RequestSvc::Request('paychannel') : PayChannel::CHANNEL_POS_RECHARGE;
+        $tradeno = RequestSvc::Request('tradeno');
+ 
         if(!in_array($paychannel,PayChannel::$RECHARGE_CHANNEL_OPTIONS)){
             $ret['errno'] = '50105';
             $this->outPut($ret);
         }
-            
-
-        $result = TransactionSvc::getByOrderid($orderid);
+        
+        $result = TransactionSvc::getById($transid);
         if(!empty($result)){
-           $transid = $result['id'];
-           $_amount_  = $result['tin'];
-           $_fee_ = $result['fee'];
+           $transid = $result->id;
+           $_amount_  = $result->tin;
+           $_fee_ = $result->fee;
         }else{
-            $params = array(
-                'orderid'=>$orderid,
-                'btype'=>Transaction::BTYPE_RECHARGE,
-                'uid'=>$this->uid,
-                'type'=>Transaction::TYPE_IN,
-                'amount'=>$amount,
-                'fee'=>$fee,
-            );
-            $transid = TransactionSvc::addTrans($params);
-            $_amount_ = $amount;
-            $_fee_ = $fee;
+            $ret['errno'] = '50108';
+            $this->outPut($ret);
         }
        
-
         $cat = Accountingrecord::CAT_RECHARGE;
         $from = Accountingrecord::FROM_POS;
         $remark = 'POS Recharge';
@@ -159,7 +173,7 @@ class NotifyController extends ApibaseController
         }
         $ret['errno'] = '50108';
         $this->outPut($ret);
-     }
+    }
 
 
 }

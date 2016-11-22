@@ -14,10 +14,10 @@ class Transaction extends Entity
 	);
 
 	static $STATE_CONF = array(
-		self::STATE_INIT =>array('NAME'=>'初始'),
-		self::STATE_SUCC =>array('NAME'=>'成功'),
-		self::STATE_PROCESSING =>array('NAME'=>'处理中'),
-		self::STATE_FAIL =>array('NAME'=>'失败'),
+		self::STATE_INIT =>array('NAME'=>'transaction.entity.state.init'),
+		self::STATE_SUCC =>array('NAME'=>'transaction.entity.state.succ'),
+		self::STATE_PROCESSING =>array('NAME'=>'transaction.entity.state.processing'),
+		self::STATE_FAIL =>array('NAME'=>'transaction.entity.state.fail'),
 	);
 	
     const BTYPE_UNKNOWN     = 10;
@@ -28,10 +28,10 @@ class Transaction extends Entity
 	
 
 	static $BTYPE_CONF = array(
-		self::BTYPE_UNKNOWN =>array('NAME'=>'未知'),
-		self::BTYPE_REFUND =>array('NAME'=>'退款'),
-		self::BTYPE_CASH =>array('NAME'=>'取现'),
-		self::BTYPE_RECHARGE =>array('NAME'=>'充值'),	
+		self::BTYPE_UNKNOWN =>array('NAME'=>'transaction.entity.btype.unknown'),
+		self::BTYPE_REFUND =>array('NAME'=>'transaction.entity.btype.refund'),
+		self::BTYPE_CASH =>array('NAME'=>'transaction.entity.btype.cash'),
+		self::BTYPE_RECHARGE =>array('NAME'=>'transaction.entity.btype.recharge'),	
 	);
 
 	static $BTYPE_OPTIONS = array(
@@ -49,8 +49,8 @@ class Transaction extends Entity
 	);
 
 	static $TYPE_CONF = array(
-		self::TYPE_IN =>array('NAME'=>'收入'),
-		self::TYPE_OUT =>array('NAME'=>'支出'),
+		self::TYPE_IN =>array('NAME'=>'transaction.entity.type.in'),
+		self::TYPE_OUT =>array('NAME'=>'transaction.entity.type.out'),
 	);
 
 
@@ -63,8 +63,8 @@ class Transaction extends Entity
 	);
 	
 	static $SSTATE_CONF = array(
-		self::SSTATE_UNSETTLED => array('NAME'=>'未结算'),
-		self::SSTATE_SETTLED => array('NAME'=>'已结算'),
+		self::SSTATE_UNSETTLED => array('NAME'=>'transaction.entity.sstate.unsettled'),
+		self::SSTATE_SETTLED => array('NAME'=>'transaction.entity.sstate.settled'),
 	);
 
 	const ID_OBJ  = 'transaction';
@@ -89,6 +89,8 @@ class Transaction extends Entity
 		$obj->sstate = in_array($param['sstate'],self::$SSTATE_OPTIONS) ? $param['sstate'] : self::SSTATE_UNSETTLED;
 		$obj->channelid = is_null($param['channelid']) ? PayChannel::CHANNEL_UNKNOWN : $param['channelid'];
 		$obj->tradeno = is_null($param['tradeno']) ? '' : $param['tradeno'];
+		$obj->user_id = is_null($param['user_id']) ? 0 : $param['user_id'];
+		$obj->sn = is_null($param['sn']) ? '' : $param['sn'];
 		return $obj;
 	}
 }

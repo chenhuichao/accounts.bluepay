@@ -26,7 +26,6 @@ class ApibaseController extends Yaf_Controller_Abstract
 
     public function checkLogin()
     {/*{{{*/
-        
         UserSdk::setFlag(self::ACCOUNTS_APP_ID);
         $sid = $this->getAppSessionId();
         $res = UserSdk::getUserInfoBySid($sid);
@@ -34,6 +33,15 @@ class ApibaseController extends Yaf_Controller_Abstract
         if($key > 0){
             $uid = BindUserSvc::getUidByKey($key);
             if($uid) $this->uid = $uid;
+            elseif(null == $uid && $key > 0){
+                $uid = BindUserSvc::createUser($key);
+                if($uid) $this->uid = $uid;
+                else{
+                    $ret = $this->initOutPut();
+                    $ret['errno'] = '50000';
+                    $this->outPut($ret);
+                }
+            }
             else{
                 $ret = $this->initOutPut();
                 $ret['errno'] = '50000';
