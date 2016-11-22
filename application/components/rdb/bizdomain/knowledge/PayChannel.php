@@ -64,7 +64,7 @@ class PayChannel
 			'CODE'=>'UNKNOWN',
 		),
 		self::CHANNEL_POS_RECHARGE=>array(
-			'NAME'=>'POS充值',
+			'NAME'=>'POS Visa RECHARGE',
 			'CODE'=>'POS_RECHARGE',
 		),
 	);
