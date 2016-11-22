@@ -157,6 +157,13 @@ class NotifyController extends ApibaseController
         $from = Accountingrecord::FROM_POS;
         $remark = 'POS Recharge';
         
+        $uid = BindUserSvc::getUidByKey($merchant_id);
+        if($uid) $this->uid = $uid;
+        else{
+            $ret = $this->initOutPut();
+            $ret['errno'] = '50000';
+            $this->outPut($ret);
+        }
         $accountinfo = AccountsSvc::getByUidAndCat($uid);
         $accountid = $accountinfo['id'];
         $params = array(
