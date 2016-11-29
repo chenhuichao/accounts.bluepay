@@ -147,7 +147,7 @@ class AccountsController extends ApibaseController
 	 */
     public function cashAction()
     {/*{{{*/
-        $pay_passwd = RequestSvc::Request('pay_passwd',''));
+        $pay_passwd = RequestSvc::Request('pay_passwd','');
         $hash = UserSvc::encodePayPasswd($pay_passwd);
         $user = UserSvc::getById($this->user_table_id);
         if($hash != $user->pay_passwd){
