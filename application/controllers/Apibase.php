@@ -3,6 +3,7 @@
 class ApibaseController extends Yaf_Controller_Abstract
 {
     public $uid;
+    public $user_table_id = 0;
 
     const ACCOUNTS_APP_ID = 101;
 
@@ -34,13 +35,16 @@ class ApibaseController extends Yaf_Controller_Abstract
         $sid = $this->getAppSessionId();
         $res = UserSdk::getUserInfoBySid($sid);
         $key = isset($res['merchant_id']) && $res['merchant_id'] > 0 ? $res['merchant_id'] : 0;
+
         if($key > 0){
             $uid = BindUserSvc::getUidByKey($key);
             if($uid) $this->uid = $uid;
             elseif(null == $uid && $key > 0){
                 $uid = BindUserSvc::createUser($key);
-                if($uid) $this->uid = $uid;
-                else{
+                if($uid){
+                    $this->uid = $uid;
+                    $this->user_table_id = $res['user_id'];
+                }else{
                     $ret = $this->initOutPut();
                     $ret['errno'] = '50000';
                     $this->outPut($ret);
