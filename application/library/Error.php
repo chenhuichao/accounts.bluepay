@@ -9,7 +9,7 @@ class Error
     public static function error4SysCode()
     {/*{{{*/
         return array(
-            '0'     =>     'succ',
+            '0'     =>     'Success',
             '10001' => '参数错误',
             '10002' => '数据格式错误',
             '10003' => '操作错误',
