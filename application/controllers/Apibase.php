@@ -38,8 +38,10 @@ class ApibaseController extends Yaf_Controller_Abstract
 
         if($key > 0){
             $uid = BindUserSvc::getUidByKey($key);
-            if($uid) $this->uid = $uid;
-            elseif(null == $uid && $key > 0){
+            if($uid){
+                $this->uid = $uid;
+                $this->user_table_id = $res['user_id'];
+            }elseif(null == $uid && $key > 0){
                 $uid = BindUserSvc::createUser($key);
                 if($uid){
                     $this->uid = $uid;
