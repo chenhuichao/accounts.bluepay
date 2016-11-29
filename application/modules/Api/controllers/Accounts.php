@@ -177,6 +177,8 @@ class AccountsController extends ApibaseController
 	    	'uid'=>$uid,
 	    	'type'=>Transaction::TYPE_OUT,
 	    	'amount'=>$amount,
+            'user_id'=>$this->user_table_id,
+            'merchant_id'=>$this->merchant_table_id,
 	    );
 	    $r = TransactionSvc::addTrans($params);
 		if(!$r){

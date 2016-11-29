@@ -41,11 +41,13 @@ class ApibaseController extends Yaf_Controller_Abstract
             if($uid){
                 $this->uid = $uid;
                 $this->user_table_id = $res['user_id'];
+                $this->merchant_table_id = $key;
             }elseif(null == $uid && $key > 0){
                 $uid = BindUserSvc::createUser($key);
                 if($uid){
                     $this->uid = $uid;
                     $this->user_table_id = $res['user_id'];
+                    $this->merchant_table_id = $key;
                 }else{
                     $ret = $this->initOutPut();
                     $ret['errno'] = '50000';
