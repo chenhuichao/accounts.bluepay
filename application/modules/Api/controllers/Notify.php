@@ -129,7 +129,7 @@ class NotifyController extends ApibaseController
             $this->outPut($ret);
         }
 
-        if($fee <= 0){
+        if($fee < 0){
             $ret['errno'] = '50103';
             $this->outPut($ret);
         }
